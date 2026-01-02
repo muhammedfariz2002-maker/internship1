@@ -1,4 +1,4 @@
-name: Deploy ASP.NET Core to Monster
+name: Deploy ASP.NET Core to Monster (SFTP)
 
 on:
   push:
@@ -27,13 +27,13 @@ jobs:
       - name: Publish (Release)
         run: dotnet publish -c Release -o publish
 
-      - name: Deploy to Monster via SFTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Upload via SFTP (SCP)
+        uses: appleboy/scp-action@v0.1.7
         with:
-          server: ${{ secrets.FTP_SERVER }}
+          host: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: sftp
           port: 22
-          local-dir: publish/
-          server-dir: ${{ secrets.FTP_TARGET_DIR }}
+          source: "publish/*"
+          target: "/wwwroot/"
+          strip_components: 1
