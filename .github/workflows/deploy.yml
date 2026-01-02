@@ -37,3 +37,4 @@ jobs:
           source: "publish/*"
           target: "/wwwroot/"
           strip_components: 1
+          debug: true
