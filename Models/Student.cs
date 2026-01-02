@@ -9,7 +9,7 @@ namespace internship1.Models
         public string Name { get; set; }
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email format")]
-
+        //test
         public string Email { get; set; }
         [Required(ErrorMessage = "Course is required")]
         public string Course { get; set; }
