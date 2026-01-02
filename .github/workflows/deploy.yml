@@ -1,4 +1,4 @@
-name: Deploy ASP.NET Core to Monster (FTPS)
+name: Deploy ASP.NET Core to Monster (Safe IIS)
 
 on:
   push:
@@ -27,7 +27,26 @@ jobs:
       - name: Publish
         run: dotnet publish -c Release -o publish
 
-      - name: Deploy via FTPS (Monster supported)
+      # 1️⃣ Put app offline
+      - name: Put app offline
+        run: |
+          echo "<h2>Maintenance</h2><p>Updating application. Please wait...</p>" > app_offline.htm
+
+      - name: Upload app_offline.htm
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          local-dir: ./
+          server-dir: /wwwroot/
+          include: |
+            app_offline.htm
+
+      # 2️⃣ Deploy application files
+      - name: Deploy application
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
@@ -37,3 +56,17 @@ jobs:
           port: 21
           local-dir: publish/
           server-dir: /wwwroot/
+
+      # 3️⃣ Bring app back online
+      - name: Remove app_offline.htm
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          local-dir: ./
+          server-dir: /wwwroot/
+          exclude: |
+            *
