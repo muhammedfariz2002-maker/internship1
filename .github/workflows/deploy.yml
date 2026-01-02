@@ -1,4 +1,4 @@
-name: Deploy ASP.NET Core to Monster (Safe IIS)
+name: Deploy ASP.NET Core to Monster (Safe IIS + Stable FTPS)
 
 on:
   push:
@@ -10,28 +10,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout code
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 2️⃣ Setup .NET
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
 
+      # 3️⃣ Restore dependencies
       - name: Restore
         run: dotnet restore
 
+      # 4️⃣ Build
       - name: Build
         run: dotnet build -c Release --no-restore
 
+      # 5️⃣ Publish
       - name: Publish
         run: dotnet publish -c Release -o publish
 
-      # 1️⃣ Put app offline
-      - name: Put app offline
+      # 6️⃣ Create app_offline.htm (STOP IIS APP)
+      - name: Create app_offline.htm
         run: |
-          echo "<h2>Maintenance</h2><p>Updating application. Please wait...</p>" > app_offline.htm
+          echo "<h2>Maintenance</h2><p>Application is updating. Please wait...</p>" > app_offline.htm
 
+      # 7️⃣ Upload app_offline.htm (safe stop)
       - name: Upload app_offline.htm
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -44,8 +50,13 @@ jobs:
           server-dir: /wwwroot/
           include: |
             app_offline.htm
+          passive: true
+          security: loose
+          concurrency: 1
+          timeout: 600000
+          log-level: minimal
 
-      # 2️⃣ Deploy application files
+      # 8️⃣ Deploy application files
       - name: Deploy application
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -56,8 +67,13 @@ jobs:
           port: 21
           local-dir: publish/
           server-dir: /wwwroot/
+          passive: true
+          security: loose
+          concurrency: 1
+          timeout: 600000
+          log-level: minimal
 
-      # 3️⃣ Bring app back online
+      # 9️⃣ Remove app_offline.htm (START IIS APP)
       - name: Remove app_offline.htm
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -70,3 +86,8 @@ jobs:
           server-dir: /wwwroot/
           exclude: |
             *
+          passive: true
+          security: loose
+          concurrency: 1
+          timeout: 600000
+          log-level: minimal
