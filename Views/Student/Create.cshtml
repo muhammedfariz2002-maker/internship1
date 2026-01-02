@@ -1,0 +1,37 @@
+﻿@model internship1.Models.Student
+
+@{
+    await Html.RenderPartialAsync("_AdminNavbar");
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-3">Add New Student</h2>
+    <hr />
+
+    <form method="post" class="mt-3">
+
+        <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Course</label>
+            <input asp-for="Course" class="form-control" />
+            <span asp-validation-for="Course" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-success">Save</button>
+        <a href="/Student/Index" class="btn btn-secondary">Cancel</a>
+
+    </form>
+
+</div>

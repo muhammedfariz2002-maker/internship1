@@ -1,0 +1,101 @@
+﻿@model List<internship1.Models.Student>
+
+@{
+    await Html.RenderPartialAsync("_AdminNavbar");
+}
+<div class="container mt-4">
+
+    <div class="row mb-4">
+
+        <!-- Total Students Card -->
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Students</h5>
+                    <h3 class="card-text">@ViewBag.TotalStudents</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Students per Course -->
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Students by Course</h5>
+                    <table class="table table-bordered mt-3">
+                        <thead>
+                            <tr>
+                                <th>Course</th>
+                                <th>Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.CourseCounts)
+                            {
+                                <tr>
+                                    <td>@item.Course</td>
+                                    <td>@item.Count</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="container mt-4">
+
+    <h2 class="mb-3">Students List</h2>
+    <hr />
+    <a class="btn btn-outline-success mb-3" href="/Student/Export">
+        Export to Excel
+    </a>
+
+
+    <a class="btn btn-success mb-3" href="/Student/Create">Add New Student</a>
+    
+    <form method="get" class="row mb-3">
+        <div class="col-md-4">
+            <input type="text" name="search" class="form-control" placeholder="Search students..." value="@Context.Request.Query["search"]" />
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary">Search</button>
+            <a href="/Student/Index" class="btn btn-secondary">Clear</a>
+
+        </div>
+    </form>
+
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Course</th>
+                <th style="width:150px;">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>@item.Email</td>
+                    <td>@item.Course</td>
+                    <td>
+                        <a class="btn btn-sm btn-primary" href="/Student/Edit/@item.Id">Edit</a>
+                        <a class="btn btn-sm btn-danger" href="/Student/Delete/@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
