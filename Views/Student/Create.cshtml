@@ -4,34 +4,407 @@
     await Html.RenderPartialAsync("_AdminNavbar");
 }
 
-<div class="container mt-4">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Student | Admin Panel</title>
 
-    <h2 class="mb-3">Add New Student</h2>
-    <hr />
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <form method="post" class="mt-3">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        <div class="mb-3">
-            <label class="form-label">Name</label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --success: #06d6a0;
+            --danger: #ef476f;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gray: #e9ecef;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-hover: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fb 0%, #e9ecef 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .form-container {
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 0 15px;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: none;
+        }
+
+        .form-header {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-icon {
+            background: rgba(255,255,255,0.2);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 0.5rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+            .back-btn:hover {
+                background: rgba(255,255,255,0.3);
+                transform: translateX(-5px);
+                color: white;
+            }
+
+        .form-body {
+            padding: 2.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.8rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+            .form-label i {
+                color: var(--primary);
+                width: 20px;
+            }
+
+        .form-control {
+            padding: 0.875rem 1rem 0.875rem 3rem;
+            border: 2px solid var(--gray);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+            .form-control:focus {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+            }
+
+        .input-container {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+
+        .validation-message {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--gray);
+        }
+
+        .btn-submit {
+            background: linear-gradient(90deg, var(--success), #05b888);
+            color: white;
+            border: none;
+            padding: 0.875rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            flex: 1;
+            justify-content: center;
+        }
+
+            .btn-submit:hover {
+                background: linear-gradient(90deg, #05b888, #049c72);
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(6, 214, 160, 0.3);
+            }
+
+        .btn-cancel {
+            background: white;
+            color: #6c757d;
+            border: 2px solid var(--gray);
+            padding: 0.875rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            text-decoration: none;
+            flex: 1;
+            justify-content: center;
+        }
+
+            .btn-cancel:hover {
+                background: var(--gray);
+                color: var(--dark);
+                border-color: #adb5bd;
+            }
+
+        @@media (max-width: 768px) {
+            .form-body {
+                padding: 1.5rem;
+            }
+
+            .form-header {
+                padding: 1.5rem;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn-submit,
+            .btn-cancel {
+                width: 100%;
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .form-container {
+                padding: 0 10px;
+                margin: 1rem auto;
+            }
+
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .back-btn {
+                width: 100%;
+                justify-content: center;
+                margin-top: 1rem;
+            }
+
+            .form-control {
+                padding-left: 2.5rem;
+            }
+        }
+
+        .required::after {
+            content: ' *';
+            color: var(--danger);
+        }
+
+        .form-control.is-invalid {
+            border-color: var(--danger);
+        }
+
+            .form-control.is-invalid:focus {
+                box-shadow: 0 0 0 0.25rem rgba(239, 71, 111, 0.25);
+            }
+
+        .text-danger {
+            color: var(--danger) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-card">
+            <!-- Header -->
+            <div class="form-header">
+                <div class="header-content">
+                    <div class="header-title">
+                        <div class="header-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div>
+                            <h2 class="mb-1">Add New Student</h2>
+                            <p class="mb-0 opacity-75">Fill in the student details below</p>
+                        </div>
+                    </div>
+                    <a href="/Student/Index" class="back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Students
+                    </a>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <div class="form-body">
+                <form method="post" id="studentForm">
+                    <!-- Name Field -->
+                    <div class="form-group">
+                        <label class="form-label required">
+                            <i class="fas fa-user"></i>
+                            Full Name
+                        </label>
+                        <div class="input-container">
+                            <input asp-for="Name"
+                                   class="form-control"
+                                   placeholder="Enter student's full name"
+                                   autocomplete="name"
+                                   autofocus />
+                            <i class="fas fa-user input-icon"></i>
+                        </div>
+                        <span asp-validation-for="Name" class="validation-message text-danger">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>Please enter a valid name</span>
+                        </span>
+                    </div>
+
+                    <!-- Email Field -->
+                    <div class="form-group">
+                        <label class="form-label required">
+                            <i class="fas fa-envelope"></i>
+                            Email Address
+                        </label>
+                        <div class="input-container">
+                            <input asp-for="Email"
+                                   type="email"
+                                   class="form-control"
+                                   placeholder="student@example.com"
+                                   autocomplete="email" />
+                            <i class="fas fa-envelope input-icon"></i>
+                        </div>
+                        <span asp-validation-for="Email" class="validation-message text-danger">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>Please enter a valid email address</span>
+                        </span>
+                    </div>
+
+                    <!-- Course Field -->
+                    <div class="form-group">
+                        <label class="form-label required">
+                            <i class="fas fa-graduation-cap"></i>
+                            Course
+                        </label>
+                        <div class="input-container">
+                            <input asp-for="Course"
+                                   class="form-control"
+                                   placeholder="e.g., Computer Science, Business Administration"
+                                   autocomplete="off" />
+                            <i class="fas fa-graduation-cap input-icon"></i>
+                        </div>
+                        <span asp-validation-for="Course" class="validation-message text-danger">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>Please enter a course name</span>
+                        </span>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit" id="submitBtn">
+                            <i class="fas fa-save"></i>
+                            Save Student
+                        </button>
+                        <a href="/Student/Index" class="btn-cancel">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
         </div>
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input asp-for="Email" class="form-control" />
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-        <div class="mb-3">
-            <label class="form-label">Course</label>
-            <input asp-for="Course" class="form-control" />
-            <span asp-validation-for="Course" class="text-danger"></span>
-        </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('studentForm');
+            const submitBtn = document.getElementById('submitBtn');
 
-        <button type="submit" class="btn btn-success">Save</button>
-        <a href="/Student/Index" class="btn btn-secondary">Cancel</a>
+            form.addEventListener('submit', function(e) {
+                let isValid = true;
+                const inputs = form.querySelectorAll('input');
 
-    </form>
+                inputs.forEach(input => {
+                    if (!input.value.trim()) {
+                        isValid = false;
+                        input.classList.add('is-invalid');
+                    } else {
+                        input.classList.remove('is-invalid');
+                    }
+                });
 
-</div>
+                if (!isValid) {
+                    e.preventDefault();
+                    alert('Please fill in all required fields.');
+                } else {
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                    submitBtn.disabled = true;
+                }
+            });
+
+            // Clear validation on input
+            const inputs = form.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    this.classList.remove('is-invalid');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
